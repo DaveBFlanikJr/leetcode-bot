@@ -16,6 +16,9 @@ BRANCH = os.getenv("branch")
 FOLDER = os.getenv("folder")
 BASE_URL = os.getenv("base_url")
 
+# GITHUB TOKEN
+github_token = os.getenv("GITHUB_TOKEN")
+
 async def fetch_file(desired_problem: int) -> str:
     # Ensure number is formated correctly
     problem = str(desired_problem).zfill(4)
@@ -24,7 +27,10 @@ async def fetch_file(desired_problem: int) -> str:
     logging.info(f"API URL: {api_url}")
 
     async with aiohttp.ClientSession() as session:
-        async with session.get(api_url) as r:
+        headers = {
+                "Authorization": f"token {github_token}"
+            }
+        async with session.get(api_url, headers=headers) as r:
 
             logging.info(f"Response status: {r.status}")
             logging.info(f"Response headers: {r.headers}")
