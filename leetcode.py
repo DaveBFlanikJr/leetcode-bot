@@ -25,6 +25,10 @@ async def fetch_file(desired_problem: int) -> str:
 
     async with aiohttp.ClientSession() as session:
         async with session.get(api_url) as r:
+
+            logging.info(f"Response status: {r.status}")
+            logging.info(f"Response headers: {r.headers}")
+
             if r.status != 200:
                 logging.error(f"Error: Received status code {r.status}")
                 return "Failed to fetch file list."
