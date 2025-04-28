@@ -16,18 +16,20 @@ async def fetch_file(desired_problem: int) -> str:
     # Ensure number is formated correctly
     problem = str(desired_problem).zfill(4)
     # create the url
-    return f"{BASE_URL}/{OWNER}/{REPO}/contents/{FOLDER}/{problem}.rb"
+    api_url = f"{BASE_URL}/{OWNER}/{REPO}/contents/{FOLDER}"
+    print(f"API URL: {api_url}")
 
     async with aiohttp.ClientSession() as session:
         async with session.get(api_url) as r:
             if r.status != 200:
+                print(f"Error: Received status code {r.status}")
                 return "Failed to fetch file list."
 
             files = await r.json()
             # print(files)
 
             for file in files:
-                if file["name"].startswith(problem):
+                if file["name"].startswith(problem) and file["name"].endswith(".rb"):
                     filename = file["name"]
 
                     raw_url = f"https://raw.githubusercontent.com/{OWNER}/{REPO}/{BRANCH}/{FOLDER}/{filename}"
