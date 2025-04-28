@@ -10,13 +10,13 @@ OWNER = os.getenv("owner")
 REPO = os.getenv("repo")
 BRANCH = os.getenv("branch")
 FOLDER = os.getenv("folder")
-base_url = os.getenv("base_url")
+BASE_URL = os.getenv("base_url")
 
 async def fetch_file(desired_problem: int) -> str:
     # Ensure number is formated correctly
     problem = str(desired_problem).zfill(4)
     # create the url
-    api_url = f"{base_url}/{OWNER}/{REPO}/contents/{FOLDER}"
+    return f"{BASE_URL}/{OWNER}/{REPO}/contents/{FOLDER}/{problem}.rb"
 
     async with aiohttp.ClientSession() as session:
         async with session.get(api_url) as r:
