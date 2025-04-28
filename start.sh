@@ -1,0 +1,13 @@
+#!/bin/bash
+
+echo "Starting Slack bot server..."
+
+# entry point to app
+python3 main.py &
+
+# Sleep for a second to make sure server is up
+sleep 1
+
+echo "Starting ngrok tunnel..."
+# Run ngrok normally (in the foreground)
+ngrok http 3000

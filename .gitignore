@@ -1,0 +1,15 @@
+# Ignore Python virtual environments
+venv/
+__pycache__/
+
+# Ignore environment configuration files (e.g., sensitive info)
+.env
+
+# Ignore ngrok configuration (if needed)
+.ngrok2/
+
+# Ignore log files
+*.log
+
+# Ignore compiled Python files
+*.pyc
