@@ -15,6 +15,12 @@ SLACK_SIGNING_SECRET = os.getenv("slack_signing_secret")
 # create app
 app = AsyncApp(token=SLACK_BOT_TOKEN, signing_secret=SLACK_SIGNING_SECRET)
 
+@app.event("url_verification")
+async def url_verification(event, say):
+    return {
+        "challenge": event["challenge"]
+    }
+
 @app.command("/leetcode")
 async def handle_leetcode_command(ack, respond, command):
     await ack()
