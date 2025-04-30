@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv
-import asyncio
+# import asyncio
+import re
 import aiohttp
 import logging
 from logging_config import setup_logging
@@ -13,18 +14,20 @@ load_dotenv()
 OWNER = os.getenv("owner")
 REPO = os.getenv("repo")
 BRANCH = os.getenv("branch")
-FOLDER = os.getenv("folder")
+# FOLDER = os.getenv("folder")
 BASE_URL = os.getenv("base_url")
 
 # GITHUB TOKEN
 github_token = os.getenv("GITHUB_TOKEN")
 
-async def fetch_file(desired_problem: int) -> str:
+async def fetch_file(desired_lang: str, desired_problem: int) -> str:
+    # print(f"\n[DEBUG] fetch_file() args: lang={desired_lang}, problem={desired_problem}\n")
     # Ensure number is formated correctly
+    print(f"\n-------LANG {desired_lang}-------------\n")
     problem = str(desired_problem).zfill(4)
     # create the url
-    api_url = f"{BASE_URL}/{OWNER}/{REPO}/contents/{FOLDER}"
-    logging.info(f"API URL: {api_url}")
+    api_url = f"{BASE_URL}/{OWNER}/{REPO}/contents/{desired_lang}"
+    logging.info(f"FULL URL: {BASE_URL}/{OWNER}/{REPO}/contents/{desired_lang}")
 
     async with aiohttp.ClientSession() as session:
         headers = {
@@ -43,10 +46,10 @@ async def fetch_file(desired_problem: int) -> str:
             logging.info(f"Received files: {files}")
 
             for file in files:
-                if file["name"].startswith(problem) and file["name"].endswith(".rb"):
+                if file["name"].startswith(problem) and re.search(r"\.\w+$", file["name"]):
                     filename = file["name"]
 
-                    raw_url = f"https://raw.githubusercontent.com/{OWNER}/{REPO}/{BRANCH}/{FOLDER}/{filename}"
+                    raw_url = f"https://raw.githubusercontent.com/{OWNER}/{REPO}/{BRANCH}/{desired_lang}/{filename}"
                     logging.info(f"RAW_URL: {raw_url}")
 
                     async with session.get(raw_url) as raw_r:
