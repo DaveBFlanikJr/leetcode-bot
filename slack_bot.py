@@ -37,9 +37,6 @@ async def handle_leetcode_command(ack, respond, command):
     # print(text)
     logging.info(f"command text: '{text}', parts: {parts}")
 
-    # if len(parts) < 2 :
-    #     await respond("Please use the format: `/leetcode <language> <problem number>`")
-    #     return
     # convert
     lang = parts[0].lower()
     problem_str = parts[1]
