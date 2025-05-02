@@ -6,7 +6,7 @@ A Slack bot that fetches solutions to Leetcode problems directly from the GitHub
 
 - Fetch Leetcode problem solutions by number.
 - Use the `/leetcode <problem_number>` command in Slack.
-- Supports Ruby (more to come in the future)
+- Supports the lookup of problems in multiple Langagues
 - Easy to set up and run locally or deploy to cloud platforms like Render, Heroku, etc.
 
 ## Installation
