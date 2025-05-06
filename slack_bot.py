@@ -17,15 +17,23 @@ SLACK_SIGNING_SECRET = os.getenv("slack_signing_secret")
 # create app
 app = AsyncApp(token=SLACK_BOT_TOKEN, signing_secret=SLACK_SIGNING_SECRET)
 
-@app.event("url_verification")
-async def url_verification(event, say):
-    return {
-        "challenge": event["challenge"]
-    }
+@app.middleware
+async def handle_url_verification(logger, body, next):
+    logger.info(f"BODY: {body}")
+    if body.get("type") == "url_verification":
+        logger.info("Handling URL verification...")
+        return {"challenge": body["challenge"]}
+    return await next()
+
+@app.middleware
+async def log_all_requests(logger, body, next):
+    logger.info(f"[SLACK MIDDLEWARE] Received: {body}")
+    return await next()
 
 @app.command("/leetcode")
 async def handle_leetcode_command(ack, respond, command):
     await ack()
+    await respond("Slash command received")
     logging.info(command)
     # get the requested problem number
     text = command.get("text", " ")
