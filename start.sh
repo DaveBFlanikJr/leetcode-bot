@@ -5,7 +5,7 @@ lsof -ti tcp:3000 | xargs kill -9 2>/dev/null
 echo "Starting Slack bot server..."
 
 # entry point to app
-python3 main.py &
+uvicorn main:api --reload --port 3000
 
 # Sleep for a second to make sure server is up
 sleep 1
