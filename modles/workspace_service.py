@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from typing import List, Dict, Optional, Union, Any
 from modles.workspace import Workspace
-from modles.db import SessionLocal
+from modles.db import SessionLocal, get_db_session
 
 
 class WorkspaceCreateRequest(BaseModel):
@@ -18,40 +18,28 @@ class WorkspaceKey(BaseModel):
     workspace_id: str
 
 def create_workspace(data: WorkspaceCreateRequest):
-    session = SessionLocal()
-    try:
+    with get_db_session() as session:
         Workspace.add_workspace(
             session,
             workspace_id=data.workspace_id,
             workspace_name=data.workspace_name,
             token=data.token
         )
-    finally:
-        session.close()
-
 
 def get_workspace(data: WorkspaceKey):
-    session = SessionLocal()
-    try:
+    with get_db_session() as session:
         return Workspace.get_workspace(session, workspace_id=data.workspace_id)
-    finally:
-        session.close()
+
 
 def update_workspace(data: WorkspaceUpdateRequest):
-    session = SessionLocal()
-    try:
+    with get_db_session() as session:
         Workspace.update_workspace(
             session,
             workspace_id=data.workspace_id,
             workspace_name=data.workspace_name,
             token=data.token
         )
-    finally:
-        session.close()
 
 def delete_workspace(data: WorkspaceKey):
-    session = SessionLocal()
-    try:
+    with get_db_session() as session:
         Workspace.remove_workspace(session, workspace_id=data.workspace_id)
-    finally:
-        session.close()
